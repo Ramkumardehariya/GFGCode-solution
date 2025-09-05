@@ -8,36 +8,25 @@ struct Node
 // Should return true if tree is Sum Tree, else false
 class Solution {
   public:
-  
-    pair<bool,int> solve(Node* root){
+    pair<int,bool> solve(Node* root){
         if(root == NULL){
-            return {true,0};
+            return {0,true};
         }
         if(root->left == NULL && root->right == NULL){
-            return {true,root->data};
+            return {root->data, true};
         }
         
-        pair<bool,int> left = solve(root->left);
-        pair<bool,int> right =solve(root->right);
+        pair<int,bool> left = solve(root->left);
+        pair<int,bool> right = solve(root->right);
         
-        bool leftAns = left.first;
-        bool rightAns = right.first;
+        pair<int,bool> ans;
+        bool check = ((left.first + right.first) == root->data) && left.second && right.second;
+        ans.second = check;
+        ans.first = left.first+right.first+root->data;
         
-        bool cond = root->data == left.second+right.second;
-        
-        pair<bool,int> ans;
-        
-        if(leftAns && rightAns && cond){
-            ans.first = true;
-            ans.second = 2*root->data;
-        }
-        else{
-            ans.first = false;
-            ans.second = root->data + left.second + right.second;
-        }
         return ans;
     }
     bool isSumTree(Node* root) {
-        return solve(root).first;
+        return solve(root).second;
     }
 };
