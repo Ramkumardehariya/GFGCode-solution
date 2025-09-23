@@ -1,23 +1,17 @@
-// function Template for C++
-
 class Solution {
   public:
-  
-    void solve(queue<int> &ans, queue<int> &q){
-        if(q.empty()){
-            return;
+    void solve(int i, int n, queue<int> &q){
+        if(i == n){
+            return ;
         }
         int num = q.front();
         q.pop();
-        solve(ans, q);
-        ans.push(num);
+        solve(i+1, n, q);
+        q.push(num);
     }
-    queue<int> reverseQueue(queue<int> &q) {
-        // code here.
-        queue<int> ans;
-        
-        solve(ans, q);
-        
-        return ans;
+    void reverseQueue(queue<int> &q) {
+        // code here
+        int n = q.size();
+        solve(0, n, q);
     }
 };
