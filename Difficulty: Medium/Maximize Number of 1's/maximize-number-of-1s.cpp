@@ -1,30 +1,20 @@
 class Solution {
   public:
-    int maxOnes(vector<int>& arr, int k) {
-        
-        int i = 0;
-        int j = 0;
-        
-        int zeroCount = 0;
-        int ans = 0;
-        int n = arr.size();
-        
-        while(j < n){
-            if(arr[j] == 0){
-                zeroCount++;
-            }
-            
-            while(zeroCount > k){
-                if(arr[i] == 0){
-                    zeroCount--;
-                }
-                i++;
-            }
-            ans = max(ans, j-i+1);
-            j++;
+    virtual int maxOnes(vector<int>& arr, int k) {
+      int maxi=0, c0=0, i=0, j=0;
+      
+      int n=arr.size();
+      
+      for(j=0; j<n; j++){
+        if(arr[j]==0) c0++;
+        while(c0>k){
+          if(arr[i]==0) c0--;
+          i++;
         }
         
-
-        return ans;
+        maxi = max(maxi, j-i+1);
+      }
+      
+      return maxi;
     }
 };
