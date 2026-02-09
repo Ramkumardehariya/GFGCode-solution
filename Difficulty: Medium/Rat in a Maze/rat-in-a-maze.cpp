@@ -1,61 +1,64 @@
 class Solution {
   public:
-    bool isSafe(int x, int y, vector<vector<int>> &maze, vector<vector<int>> &vis){
-        if((x >= 0 && x < maze.size()) && (y >= 0 && y < maze[0].size()) && (vis[x][y] == 0) && maze[x][y] == 1){
-            return true;
-        }
-        return false;
-    }
-    void solve(int x, int y,vector<vector<int>> &maze, vector<vector<int>> &vis, vector<string> &ans, string path){
-        if(x == maze.size()-1 && y == maze[0].size()-1){
+    void solve(vector<vector<int>> &maze, vector<string> &ans, vector<vector<bool>> &vis, string path, int i, int j, int n){
+        if(i == n-1 && j == n-1){
             ans.push_back(path);
             return;
         }
-        vis[x][y] = 1;
-        int newx = x+1;
-        int newy = y;
-        if(isSafe(newx, newy, maze, vis)){
+        
+        vis[i][j] = true;
+        //down
+        int srcx = i+1;
+        int srcy = j;
+        if(srcx < n && !vis[srcx][srcy] && maze[srcx][srcy] == 1){
             path.push_back('D');
-            solve(newx, newy, maze, vis, ans, path);
+            solve(maze, ans, vis,path, srcx, srcy, n);
             path.pop_back();
         }
         
-        newx = x;
-        newy = y-1;
-        if(isSafe(newx, newy, maze, vis)){
+        //Left
+        srcx = i;
+        srcy = j-1;
+        if(srcy >= 0 && !vis[srcx][srcy] && maze[srcx][srcy] == 1){
             path.push_back('L');
-            solve(newx, newy, maze, vis, ans, path);
+            solve(maze, ans, vis, path, srcx, srcy, n);
             path.pop_back();
         }
         
-        newx = x;
-        newy = y+1;
-        if(isSafe(newx, newy, maze, vis)){
+        
+        //right
+        srcx = i;
+        srcy = j+1;
+        if(srcy < n && !vis[srcx][srcy] && maze[srcx][srcy] == 1){
             path.push_back('R');
-            solve(newx, newy, maze, vis, ans, path);
+            solve(maze, ans, vis,path, srcx, srcy, n);
             path.pop_back();
         }
         
-        newx = x-1;
-        newy = y;
-        if(isSafe(newx, newy, maze, vis)){
+        
+        
+        //up
+        srcx = i-1;
+        srcy = j;
+        if(srcx >= 0 && !vis[srcx][srcy] && maze[srcx][srcy] == 1){
             path.push_back('U');
-            solve(newx, newy, maze, vis, ans, path);
+            solve(maze, ans, vis,path, srcx, srcy, n);
             path.pop_back();
         }
         
-        
-        vis[x][y] = 0;
+        vis[i][j] = false;
     }
     vector<string> ratInMaze(vector<vector<int>>& maze) {
+        // code here
         vector<string> ans;
         int n = maze.size();
-        int m = maze[0].size();
+        if(maze[0][0] == 0 || maze[n-1][n-1] == 0){
+            return ans;
+        }
         
-        vector<vector<int>> vis(n,vector<int>(m, 0));
-
-        solve(0, 0,maze, vis, ans, "");
-        
+        vector<vector<bool>> vis(n,(vector<bool>(n, 0)));
+        string path = "";
+        solve(maze, ans, vis, path, 0, 0, n);
         return ans;
     }
 };
