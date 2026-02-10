@@ -1,35 +1,24 @@
 /*
-struct Node {
-  int data;
-  struct Node *next;
-  Node(int x) {
-    data = x;
-    next = NULL;
-  }
+class Node {
+  public:
+    int data;
+    Node *next;
+
+    Node(int x) {
+       data = x;
+       next = NULL;
+    }
 };
 */
 
 class Solution {
   public:
-  
-    Node* getMid(Node* head){
-        Node* slow = head;
-        Node* fast = head->next;
-        
-        while(fast != NULL && fast->next != NULL){
-            slow = slow->next;
-            fast = fast->next->next;
-        }
-        return slow;
-    }
-  
     Node* reverse(Node* head){
-        Node* prev = NULL;
         Node* curr = head;
-        Node* next = NULL;
+        Node* prev = NULL;
         
         while(curr != NULL){
-            next = curr->next;
+            Node* next = curr->next;
             curr->next = prev;
             prev = curr;
             curr = next;
@@ -37,30 +26,37 @@ class Solution {
         
         return prev;
     }
-    bool isPalindrome(Node *head) {
+    
+    Node* midPoint(Node* head){
+        Node* slow = head;
+        Node* fast = head->next;
         
-        if(head->next == NULL){
-            return true;
+        while(fast != NULL){
+            fast = fast->next;
+            if(fast != NULL){
+                fast = fast->next;
+            }
+            slow = slow->next;
         }
         
-        Node* middle = getMid(head);
+        return slow;
+    }
+    
+    bool isPalindrome(Node *head) {
+        Node* curr1 = head;
+        Node* mid = midPoint(head);
+       
         
-        Node* temp = middle->next;
-        middle->next = reverse(temp);
+        Node* curr2 = reverse(mid);
         
-        Node* head1 = head;
-        Node* head2 = middle->next;
-        
-        while(head2 != NULL){
-            if(head1->data != head2->data){
+        while(curr2 != NULL){
+            if(curr1->data != curr2->data){
                 return false;
             }
-            head1 = head1->next;
-            head2 = head2->next;
+            curr1 = curr1->next;
+            curr2 = curr2->next;
         }
         
-        temp = middle->next;
-        middle->next = reverse(temp);
         return true;
     }
 };
