@@ -1,86 +1,76 @@
-/* Link list Node
-struct Node {
+/*
+class Node {
+  public:
     int data;
-    Node *next;
-    Node *random;
+    Node* next;
+    Node* random;
 
     Node(int x) {
         data = x;
         next = NULL;
         random = NULL;
     }
-};*/
+};
+*/
 
 class Solution {
   public:
-  
-    Node* insertAtTail(Node* &head, Node* &tail, int data){
-        Node* temp = new Node(data);
+    Node* clone(Node* head){
+        Node* ansHead = NULL;
+        Node* ansTail = NULL;
         
-        if(head == NULL){
-            head = temp;
-            tail = temp;
+        Node* curr = head;
+        
+        while(curr != NULL){
+            Node* temp = new Node(curr->data);
+            if(ansHead == NULL){
+                ansHead = temp;
+                ansTail = temp;
+            }
+            else{
+                ansTail->next = temp;
+                ansTail = temp;
+            }
+            curr = curr->next;
         }
-        else{
-            tail->next = temp;
-            tail = temp;
-        }
-        return head;
+        
+        return ansHead;
     }
-    Node *cloneLinkedList(Node *head) {
-        // Write your code here
-        Node* cloneHead = NULL;
-        Node* cloneTail = NULL;
+    
+    void createMapping(Node* originalNode, Node* copyNode, unordered_map<Node*,Node*> &mp){
+        Node* curr1 = originalNode;
+        Node* curr2 = copyNode;
         
-        Node* temp = head;
+        while(curr1 != NULL){
+            mp[curr1] = curr2;
+            curr1 = curr1->next;
+            curr2 = curr2->next;
+        }
+    }
+    
+    Node* copyRandom(Node* head, Node* ansHead, unordered_map<Node*, Node*> &mp){
+        Node* curr1 = head;
+        Node* curr2 = ansHead;
         
-        while(temp != NULL){
-            insertAtTail(cloneHead, cloneTail, temp->data);
-            temp = temp->next;
+        while(curr2 != NULL){
+            curr2->random = mp[curr1->random];
+            curr1 = curr1->next;
+            curr2 = curr2->next;
         }
         
-        Node* head1 = head;
-        Node* head2 = cloneHead;
-        
-        while(head1 != NULL && head2 != NULL){
-            Node* next = head1->next;
-            head1->next = head2;
-            head1 = next;
-            
-            next = head2->next;
-            head2->next = head1;
-            head2 = next;
-        }
-        
-        temp = head;
-        
-        while(temp != NULL){
-            if(temp->next != NULL){
-                if(temp->random != NULL){
-                   temp->next->random = temp->random->next;
-                }
-                else{
-                    temp->next->random = temp->random;
-                }
-            }
-            temp = temp->next->next;
-        }
-        
-        head1 = head;
-        head2 = cloneHead;
-        
-        while(head1 != NULL && head2 != NULL){
-            Node* next = head1->next;
-            head1->next = head1->next->next;
-            head2 = next;
-            
-            next = head2->next;
-            if(head2->next != NULL){
-                head2->next = head2->next->next;
-            }
-            head1 = next;
-        }
-        
-        return cloneHead;
+        return ansHead;
+    }
+    
+    
+    Node* cloneLinkedList(Node* head) {
+       Node* ansHead = clone(head);
+       
+       unordered_map<Node*,Node*> mp;
+       
+       createMapping(head, ansHead, mp);
+       
+       Node* ans = copyRandom(head, ansHead, mp);
+       
+       return ans;
     }
 };
