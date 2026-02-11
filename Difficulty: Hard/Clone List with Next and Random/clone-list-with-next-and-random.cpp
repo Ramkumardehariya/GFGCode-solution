@@ -37,40 +37,49 @@ class Solution {
         return ansHead;
     }
     
-    void createMapping(Node* originalNode, Node* copyNode, unordered_map<Node*,Node*> &mp){
-        Node* curr1 = originalNode;
-        Node* curr2 = copyNode;
-        
-        while(curr1 != NULL){
-            mp[curr1] = curr2;
-            curr1 = curr1->next;
-            curr2 = curr2->next;
-        }
-    }
-    
-    Node* copyRandom(Node* head, Node* ansHead, unordered_map<Node*, Node*> &mp){
-        Node* curr1 = head;
-        Node* curr2 = ansHead;
-        
-        while(curr2 != NULL){
-            curr2->random = mp[curr1->random];
-            curr1 = curr1->next;
-            curr2 = curr2->next;
-        }
-        
-        return ansHead;
-    }
-    
     
     Node* cloneLinkedList(Node* head) {
-       Node* ansHead = clone(head);
+       Node* cloneHead = clone(head);
        
-       unordered_map<Node*,Node*> mp;
+       Node* originalHead = head;
        
-       createMapping(head, ansHead, mp);
+       Node* curr1 = originalHead;
+       Node* curr2 = cloneHead;
        
-       Node* ans = copyRandom(head, ansHead, mp);
+       while(curr1 != NULL){
+           Node* next1 = curr1->next;
+           curr1->next = curr2;
+           
+           Node* next2 = curr2->next;
+           curr2->next = next1;
+           
+           curr1 = next1;
+           curr2 = next2;
+       }
        
-       return ans;
+       Node* temp = originalHead;
+       
+       while(temp != NULL){
+           if(temp->random != NULL){
+               temp->next->random = temp->random->next;
+           }
+           temp = temp->next->next;
+       }
+       
+       //revert second step;
+       curr1 = originalHead;
+       curr2 = originalHead->next;
+       
+       while(curr1 != NULL && curr2 != NULL){
+           curr1->next = curr2->next;
+           curr1 = curr1->next;
+           
+           if(curr1 != NULL){
+               curr2->next = curr1->next;
+           }
+           curr2 = curr2->next;
+       }
+       
+       return cloneHead;
     }
 };
