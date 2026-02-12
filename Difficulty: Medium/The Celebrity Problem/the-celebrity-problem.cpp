@@ -2,31 +2,34 @@ class Solution {
   public:
     int celebrity(vector<vector<int>>& mat) {
         // code here
+        int i = 0;
+        int j = 0;
         int n = mat.size();
+        int m = mat[0].size();
         
-        for(int i = 0; i<n;i++){
-            int row = i;
-            int col = i;
+        while(i < n && j < m){
+            int one = true;
             
-            int zeroCount = 0;
-            int oneCount = 0;
-            
-            for(int j = 0; j<n; j++){
-                if(row != j && mat[row][j] == 0){
-                    zeroCount++;
+            for(int k = 0; k<m; k++){
+                if(i != k && mat[i][k] == 1){
+                    one= false;
                 }
             }
             
-            for(int j = 0; j<n; j++){
-                if(col != j && mat[j][col] == 1){
-                    oneCount++;
+            int zero = true;
+            for(int k = 0; k<n; k++){
+                if(k != j && mat[k][j] == 0){
+                    zero = false;
                 }
             }
             
-            if(zeroCount == n-1 && oneCount == n-1){
+            if(zero && one){
                 return i;
             }
+            i++;
+            j++;
         }
+        
         return -1;
     }
 };
