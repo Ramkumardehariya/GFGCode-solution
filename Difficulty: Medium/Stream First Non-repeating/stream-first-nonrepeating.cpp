@@ -1,16 +1,27 @@
 class Solution {
   public:
     string firstNonRepeating(string &s) {
-        // code here
-        vector<int> count(26,0);
+        string ans = "";
         queue<char> q;
-        string ans="";
-        for(auto i:s){
-            count[i-'a']++;
-            if(count[i-'a']==1)q.push(i);
-            while(!q.empty()&&count[q.front()-'a']>1)q.pop();
-            if(q.empty())ans+='#';
-            else ans+=q.front();
+        
+        vector<int> arr(26,0);
+        
+        for(int i = 0; i<s.size(); i++){
+            arr[s[i]-'a']++;
+            
+            q.push(s[i]);
+            
+            
+            while(!q.empty() && arr[q.front()-'a'] > 1){
+                q.pop();
+            }
+            
+            if(q.empty()){
+                ans += '#';
+            }
+            else{
+                ans += q.front();
+            }
         }
         return ans;
     }
