@@ -1,17 +1,18 @@
 class Solution {
   public:
-    void solve(int i, int n, queue<int> &q){
-        if(i == n){
-            return ;
+    void solve(queue<int> &q){
+        if(q.empty()){
+            return;
         }
+        
         int num = q.front();
         q.pop();
-        solve(i+1, n, q);
+        
+        solve(q);
         q.push(num);
     }
     void reverseQueue(queue<int> &q) {
         // code here
-        int n = q.size();
-        solve(0, n, q);
+        solve(q);
     }
 };
