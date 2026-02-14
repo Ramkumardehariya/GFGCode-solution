@@ -1,41 +1,38 @@
-#include<bits/stdc++.h>
-
 class Solution {
   public:
     vector<int> firstNegInt(vector<int>& arr, int k) {
+        // write code here
+        int i = 0;
+        int j = 0;
+        queue<int> q;
+        
+        for(; j<k; j++){
+            
+            if(arr[j] < 0){
+                q.push(arr[j]);
+            }
+        }
+        j--;
         vector<int> ans;
-        deque<int> dq;
         
-        for(int i =0; i<k; i++){
-            if(arr[i] < 0){
-                dq.push_back(i);
-            }
-        }
-        
-        if(dq.size() > 0){
-            ans.push_back(arr[dq.front()]);
-        }
-        else{
-            ans.push_back(0);
-        }
-        
-        for(int i = k; i<arr.size(); i++){
-            
-            if(!dq.empty() && i-dq.front() >= k){
-                dq.pop_front();
-            }
-            
-            if(arr[i] < 0){
-                dq.push_back(i);
-            }
-            
-            if(dq.size() > 0){
-                ans.push_back(arr[dq.front()]);
-            }
-            else{
+        while(j < arr.size()){
+            if(q.empty()){
                 ans.push_back(0);
             }
+            else{
+                ans.push_back(q.front());
+            }
+            
+            if(!q.empty() && arr[i] == q.front()){
+                q.pop();
+            }
+            i++;
+            j++;
+            if(arr[j] < 0){
+                q.push(arr[j]);
+            }
         }
+        
         return ans;
     }
 };
