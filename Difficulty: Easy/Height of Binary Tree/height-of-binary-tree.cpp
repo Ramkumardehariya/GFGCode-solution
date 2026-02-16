@@ -11,20 +11,18 @@ public:
     }
 };
 */
+
 class Solution {
   public:
-    int solve(Node* node){
+    int height(Node* root) {
         
-    }
-    
-    int height(Node* node) {
-        if((node == NULL) || (node->left == NULL && node->right == NULL)){
+        if(root == NULL || root->left == NULL && root->right == NULL){
             return 0;
         }
         
-        int left = height(node->left);
-        int right = height(node->right);
+        int left = height(root->left);
+        int right = height(root->right);
         
-        return max(left, right)+1;;
+        return 1+max(left,right);
     }
 };
