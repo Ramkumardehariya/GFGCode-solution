@@ -13,43 +13,42 @@ class Node {
 class Solution {
   public:
     vector<int> zigZagTraversal(Node* root) {
-        vector<int> ans;
-        bool flag = true;
-        
         queue<Node*> q;
+        vector<int> ans;
+        
+        bool flag = true;
         q.push(root);
         
         while(!q.empty()){
-            
-            vector<int> temp;
             int size = q.size();
-            
+            vector<int> temp;
+
             for(int i = 0; i<size; i++){
-                Node* front = q.front();
+                auto node = q.front();
                 q.pop();
-                temp.push_back(front->data);
-                if(front->left){
-                    q.push(front->left);
+                temp.push_back(node->data);
+                
+                if(node->left){
+                    q.push(node->left);
                 }
-                if(front->right){
-                    q.push(front->right);
+                if(node->right){
+                    q.push(node->right);
                 }
             }
             
             if(flag){
-                for(int i = 0; i<temp.size(); i++){
-                    ans.push_back(temp[i]);
+                for(auto it: temp){
+                    ans.push_back(it);
                 }
             }
             else{
                 reverse(temp.begin(), temp.end());
-                for(int i = 0; i<temp.size(); i++){
-                    ans.push_back(temp[i]);
+                for(auto it: temp){
+                    ans.push_back(it);
                 }
             }
             flag = !flag;
         }
-        
         return ans;
     }
 };
