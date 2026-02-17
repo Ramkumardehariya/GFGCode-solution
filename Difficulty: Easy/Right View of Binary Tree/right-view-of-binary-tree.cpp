@@ -1,41 +1,44 @@
-/* A binary tree node has data, pointer to left child
-   and a pointer to right child
-struct Node
-{
+/*
+class Node {
+  public:
     int data;
-    struct Node* left;
-    struct Node* right;
+    Node* left;
+    Node* right;
 
-    Node(int x){
-        data = x;
-        left = right = NULL;
+    Node(int val) {
+        data = val;
+        left = nullptr;
+        right = nullptr;
     }
-}; */
+};
+*/
 
-// Should return  right view of tree
 class Solution {
   public:
-  
-    void solve(Node* root, vector<int> &ans, int lvl){
-        if(root == NULL){
-            return;
-        }
-        
-        if(lvl == ans.size()){
-            ans.push_back(root->data);
-        }
-        
-        solve(root->right, ans, lvl+1);
-        solve(root->left, ans, lvl+1);
-    }
-    // Function to return list containing elements of right view of binary tree.
     vector<int> rightView(Node *root) {
-        // Your Code here
+        //  code here
         vector<int> ans;
         
-        solve(root, ans, 0);
+        queue<pair<Node*, int>> q;
+        map<int,int> mp;
+        q.push({root, 0});
         
+        while(!q.empty()){
+            auto it = q.front();
+            q.pop();
+            mp[it.second] = it.first->data;
+            
+            if(it.first->left){
+                q.push({it.first->left, it.second+1});
+            }
+            if(it.first->right){
+                q.push({it.first->right, it.second+1});
+            }
+        }
+        
+        for(auto it: mp){
+            ans.push_back(it.second);
+        }
         return ans;
-        
     }
 };
