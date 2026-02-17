@@ -1,5 +1,4 @@
-/* A binary tree node structure
-
+/*
 class Node {
   public:
     int data;
@@ -13,34 +12,27 @@ class Node {
         right = NULL;
     }
 };
- */
+*/
 
 class Solution {
   public:
-    int height(Node* root){
+    
+    pair<int,bool> isBlanacedFast(Node* root){
         if(root == NULL){
-            return 0;
+            pair<int,bool> p = make_pair(0,1);
+            return p;
         }
         
-        int left = height(root->left);
-        int right = height(root->right);
+        pair<int,bool> left = isBlanacedFast(root->left);
+        pair<int,bool> right = isBlanacedFast(root->right);
         
-        return max(left, right)+1;
+        pair<int,bool> ans;
+        ans.first = max(left.first,right.first)+1;
+        ans.second = (abs(left.first-right.first) <= 1) && left.second && right.second;
+        
+        return ans;
     }
     bool isBalanced(Node* root) {
-        if(root == NULL){
-            return true;
-        }
-        
-        bool left = isBalanced(root->left);
-        bool right = isBalanced(root->right);
-        
-        bool diff = abs(height(root->left)-height(root->right)) <= 1;
-        
-        if(left && right && diff){
-            return true;
-        }
-        
-        return false;
+        return isBlanacedFast(root).second;
     }
 };
