@@ -8,25 +8,27 @@ struct Node
 // Should return true if tree is Sum Tree, else false
 class Solution {
   public:
-    pair<int,bool> solve(Node* root){
+    
+    pair<int,bool> isSumTreeFast(Node* root){
         if(root == NULL){
-            return {0,true};
-        }
-        if(root->left == NULL && root->right == NULL){
-            return {root->data, true};
+            pair<int,bool> p = make_pair(0,1);
+            return p;
         }
         
-        pair<int,bool> left = solve(root->left);
-        pair<int,bool> right = solve(root->right);
+        if(root->left == NULL && root->right == NULL){
+            return {root->data, 1};
+        }
+        
+        pair<int,bool> left = isSumTreeFast(root->left);
+        pair<int,bool> right = isSumTreeFast(root->right);
         
         pair<int,bool> ans;
-        bool check = ((left.first + right.first) == root->data) && left.second && right.second;
-        ans.second = check;
-        ans.first = left.first+right.first+root->data;
+        ans.first = left.first + right.first + root->data;
+        ans.second = ((left.first+right.first) == root->data) && left.second && right.second;
         
         return ans;
     }
     bool isSumTree(Node* root) {
-        return solve(root).second;
+        return isSumTreeFast(root).second;
     }
 };
