@@ -1,12 +1,10 @@
 /*
-// Tree Node
 class Node {
   public:
     int data;
     Node* left;
     Node* right;
 
-    // Constructor to initialize a new node
     Node(int val) {
         data = val;
         left = NULL;
@@ -18,40 +16,26 @@ class Node {
 class Solution {
   public:
     vector<vector<int>> verticalOrder(Node *root) {
-        map<int,map<int,vector<int>>> nodes;
+        map<int,vector<int>> mp;
         vector<vector<int>> ans;
-        
-        queue<pair<Node*,pair<int,int>>> q;
-        
-        q.push(make_pair(root,make_pair(0,0)));
-        
+        queue<pair<Node*,int>> q;
+        q.push({root, 0});
         
         while(!q.empty()){
-            pair<Node*,pair<int,int>> node = q.front();
+            auto it = q.front();
             q.pop();
-            Node* front = node.first;
-            int hd = node.second.first;
-            int lvl = node.second.second;
             
-            nodes[hd][lvl].push_back(front->data);
+            mp[it.second].push_back(it.first->data);
             
-            if(front->left){
-                q.push({front->left, {hd-1, lvl+1}});
+            if(it.first->left){
+                q.push({it.first->left, it.second-1});
             }
-            if(front->right){
-                q.push({front->right, {hd+1, lvl+1}});
+            if(it.first->right){
+                q.push({it.first->right, it.second+1});
             }
-            
         }
-        
-        for(auto i: nodes){
-            vector<int> temp;
-            for(auto j : i.second){
-                for(auto k : j.second){
-                    temp.push_back(k);
-                }
-            }
-            ans.push_back(temp);
+        for(auto it: mp){
+            ans.push_back(it.second);
         }
         return ans;
     }
