@@ -15,39 +15,26 @@ public:
 class Solution {
   public:
     vector<int> bottomView(Node *root) {
-        // Your Code Here
+        map<int,vector<int>> mp;
         vector<int> ans;
-        
-        if(root == NULL){
-            return ans;
-        }
-        map<int,int> mp;
-        
         queue<pair<Node*,int>> q;
-        q.push(make_pair(root, 0));
+        q.push({root, 0});
         
         while(!q.empty()){
-            
-            pair<Node*,int> temp = q.front();
+            auto it = q.front();
             q.pop();
-            Node* front = temp.first;
             
-            int hd = temp.second;
+            mp[it.second].push_back(it.first->data);
             
-            // if(mp.find(hd) == mp.end()){
-                mp[hd] = front->data;
-            
-            if(front->left){
-                q.push({front->left, hd-1});
+            if(it.first->left){
+                q.push({it.first->left, it.second-1});
             }
-            if(front->right){
-                q.push({front->right, hd+1});
+            if(it.first->right){
+                q.push({it.first->right, it.second+1});
             }
-            
         }
-        
         for(auto it: mp){
-            ans.push_back(it.second);
+            ans.push_back(it.second[it.second.size()-1]);
         }
         return ans;
     }
