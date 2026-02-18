@@ -1,46 +1,48 @@
-/* A binary tree node
-
-struct Node
-{
+/*
+class Node {
+public:
     int data;
-    struct Node* left;
-    struct Node* right;
+    Node* left;
+    Node* right;
 
-    Node(int x){
+    Node(int x) {
         data = x;
         left = right = NULL;
     }
 };
- */
+*/
 
 class Solution {
   public:
-    // Function to return the lowest common ancestor in a Binary Tree.
-    Node* lca(Node* root, int n1, int n2) {
-        
+    Node* solve(Node* root, int n1, int n2){
         if(root == NULL){
             return NULL;
         }
         
-        if(root->data == n1 || root->data == n2){
+        Node* left = solve(root->left, n1, n2);
+        Node* right = solve(root->right, n1, n2);
+        
+        
+        if(root->data == n1){
             return root;
         }
-        
-        Node* leftAns = lca(root->left, n1, n2);
-        Node* rightAns = lca(root->right, n1, n2);
-        
-        if(leftAns != NULL && rightAns != NULL){
+        else if(root->data == n2){
             return root;
         }
-        else if(leftAns != NULL && rightAns == NULL){
-            return leftAns;
+        else if(left != NULL && right != NULL){
+            return root;
         }
-        else if(leftAns == NULL && rightAns != NULL){
-            return rightAns;
+        else if(left == NULL && right != NULL){
+            return right;
+        }
+        else if(left != NULL && right  == NULL){
+            return left;
         }
         else{
             return NULL;
         }
-        
+    }
+    Node* lca(Node* root, int n1, int n2) {
+        return solve(root, n1, n2);
     }
 };
