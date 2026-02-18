@@ -9,45 +9,37 @@ struct Node
 // your task is to complete this function
 class Solution {
   public:
-  
-    Node* solve(Node* root, int &k, int node){
-        if(root == NULL){
-            return NULL;
-        }
-        
-        if(root->data == node){
-            return root;
-        }
-        
-        Node* leftAns = solve(root->left, k, node);
-        Node* rightAns = solve(root->right, k, node);
-        
-        if(leftAns != NULL && rightAns == NULL){
-            k--;
-            if(k <= 0){
-                k = INT_MAX;
-                return root;
-            }
-            return leftAns;
-        }
-        else if(leftAns == NULL && rightAns != NULL){
-            k--;
-            if(k <= 0){
-                k = INT_MAX;
-                return root;
-            }
-            return rightAns;
-        }
-        return NULL;
-    }
     int kthAncestor(Node *root, int k, int node) {
+        unordered_map<int,int> mp;
         
-        Node* ans = solve(root, k, node);
+        queue<Node*> q;
+        mp[root->data] = -1;
+        q.push(root);
         
-        if(ans == NULL || ans->data == node){
-            return -1;
+        while(!q.empty()){
+            auto front = q.front();
+            q.pop();
+            
+            if(front->left){
+                q.push(front->left);
+                mp[front->left->data] = front->data;
+            }
+            if(front->right){
+                q.push(front->right);
+                mp[front->right->data] = front->data;
+            }
         }
         
-        return ans->data;
+        int count = k;
+        int parent = node;
+        
+        while(count != 0){
+            
+            if(mp.find(parent) != mp.end()){
+                parent = mp[parent];
+            }
+            count--;
+        }
+        return parent;
     }
 };
