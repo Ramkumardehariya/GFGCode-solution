@@ -1,15 +1,14 @@
 class Solution {
     public int hIndex(int[] citations) {
-        // code here
-        Arrays.sort(citations);
-         int hIndex=0;
-        
-        for(int i=0;i<citations.length;i++){
-           if(citations.length-i<=citations[i]){
-            hIndex=Math.max(hIndex,citations.length-i);
+       Arrays.sort(citations);
+        int n = citations.length;
+
+        for (int i = 0; i < n; i++) {
+            int h = n - i;
+            if (citations[i] >= h) {
+                return h;
+            }
         }
-        }
-        
-        return hIndex;
+        return 0;
     }
 }
